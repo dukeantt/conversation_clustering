@@ -5,6 +5,7 @@ import pandas as pd
 import re
 from sklearn.manifold import TSNE
 import seaborn as sns
+from sklearn.cluster import KMeans
 
 
 sentences = []
@@ -36,15 +37,17 @@ model.train(IndexedList(sentences))
 
 model.sv.similarity(0, 2)
 vectors_list = model.sv.vectors.tolist()
-tsne = TSNE(n_components=3)
+tsne = TSNE(n_components=2)
 tsne_vectors = tsne.fit_transform(vectors_list)
+kmeans = KMeans(n_clusters=4, random_state=0).fit(tsne_vectors)
 
-df2 = pd.DataFrame(data=tsne_vectors, columns=["x", "y","z"])
+df2 = pd.DataFrame(data=tsne_vectors, columns=["x", "y"])
 df2['text'] = sentences2
 df2['input_text'] = input_text
 df2['bot_text'] = bot_text
 df2['intent'] = intent
 df2['entities'] = entities
 df2['action'] = action
-df2.to_csv("data/tsne_vectors6.csv", index=False)
+df2['cluster'] = kmeans.labels_
+df2.to_csv("data/tsne_vectors5.csv", index=False)
 x = 0
