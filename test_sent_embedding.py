@@ -7,47 +7,55 @@ from sklearn.manifold import TSNE
 import seaborn as sns
 from sklearn.cluster import KMeans
 
-
 sentences = []
 sentences2 = []
-input_text = []
-bot_text = []
-intent = []
-entities = []
-action = []
+short_input_texts = []
+short_bot_texts = []
+short_entities = []
+short_actions = []
 
 df = pd.read_csv('data/ExpectedConversation_27_04.csv')
 for index, value in df.iterrows():
-    sentence = str(value['input_text']) + ' ' + str(value['intent']) + ' ' + str(value['entities']) + ' ' + str(
-        value['action_1']) + ' ' + \
-               str(value['bot_text']) + ' ' + str(value['input_text'])
+    sentence = str(value['input_text']) + ' ' + str(value['intent']) + ' ' + str(value['entities']) + ' ' + \
+               str(value['action_1']) + ' ' + str(value['bot_text']) + ' ' + str(value['input_text'])
     sentence = re.sub('\[|\]|\"|\'', '', sentence)
     sentences.append(sentence.split())
     sentences2.append(sentence)
-    input_text.append(value['input_text'])
-    bot_text.append(value['bot_text'])
-    intent.append(value['intent'])
-    entities.append(value['entities'])
-    action.append(value['action_1'])
+    short_input_text = str(value['input_text']) if "scontent.xx.fbcdn.net" not in str(value['input_text']) else "url"
+    short_bot_text = str(value['bot_text']) if "scontent.xx.fbcdn.net" not in str(value['bot_text']) else "url"
+    if len(short_input_text) > 50:
+        n = int(len(short_input_text)/50)
+        short_input_text = " ".join([short_input_text[50*x:50*(x+1)]+ "-"+"<br>" for x in range(n)])
+    if len(short_bot_text) > 50:
+        n = int(len(short_bot_text)/50)
+        short_bot_text = " ".join([short_bot_text[50*x:50*(x+1)]+ "-"+"<br>" for x in range(n)])
+    short_entity = str(value['entities']) if "scontent.xx.fbcdn.net" not in str(value['entities']) else "url"
+    short_actions = str(value['action_1']) if "scontent.xx.fbcdn.net" not in str(value['action_1']) else "url"
+
+    short_input_texts.append(short_input_text)
+    short_bot_texts.append(short_bot_text)
+    short_entities.append(short_entity)
 
 ft = FastText(sentences, min_count=1, size=10)
 
 model = Average(ft)
 model.train(IndexedList(sentences))
 
-model.sv.similarity(0, 2)
-vectors_list = model.sv.vectors.tolist()
+vectors_list = model.sv.vectors.tolist()  # 10 dimensions vectors
+# tsne = TSNE(n_components=3)
 tsne = TSNE(n_components=2)
 tsne_vectors = tsne.fit_transform(vectors_list)
-kmeans = KMeans(n_clusters=4, random_state=0).fit(tsne_vectors)
+kmeans = KMeans(n_clusters=6, random_state=0).fit(tsne_vectors)
 
-df2 = pd.DataFrame(data=tsne_vectors, columns=["x", "y"])
-df2['text'] = sentences2
-df2['input_text'] = input_text
-df2['bot_text'] = bot_text
-df2['intent'] = intent
-df2['entities'] = entities
-df2['action'] = action
-df2['cluster'] = kmeans.labels_
-df2.to_csv("data/tsne_vectors5.csv", index=False)
+# vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y","z"])
+vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y"])
+df = pd.merge(df, vectors_df,right_index=True, left_index=True)
+df['combine_text'] = sentences2
+df['cluster'] = kmeans.labels_
+df['short_input_texts'] = short_input_texts
+df['short_bot_texts'] = short_bot_texts
+df['short_entities'] = short_entities
+
+# df.to_csv("data/tsne_vectors_3d.csv", index=False)
+df.to_csv("data/tsne_vectors_2d.csv", index=False)
 x = 0
