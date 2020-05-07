@@ -62,7 +62,8 @@ tsne_vectors = tsne.fit_transform(vectors_list)
 # scores_df = pd.DataFrame(scores, columns=['k', 'silhouette_score', 'inertia'])
 # scores_df.to_csv("data/scores.csv", index=False)
 
-kmeans = KMeans(n_clusters=12, random_state=0).fit(tsne_vectors)
+kmeans12 = KMeans(n_clusters=12, random_state=0).fit(tsne_vectors)
+kmeans4 = KMeans(n_clusters=4, random_state=0).fit(tsne_vectors)
 gm = GaussianMixture(n_components=6, n_init=10, covariance_type="diag").fit(tsne_vectors)
 hc = AgglomerativeClustering(n_clusters=6, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
 
@@ -71,7 +72,8 @@ hc = AgglomerativeClustering(n_clusters=6, affinity='euclidean', linkage='ward')
 vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y"])
 df = pd.merge(df, vectors_df, right_index=True, left_index=True)
 df['combine_text'] = sentences2
-df['kmeans_cluster'] = kmeans.labels_
+df['kmeans_cluster_12'] = kmeans12.labels_
+df['kmeans_cluster_4'] = kmeans4.labels_
 df['gm_cluster'] = gm.predict(tsne_vectors)
 df['hc_cluster'] = hc
 df['short_input_texts'] = short_input_texts
