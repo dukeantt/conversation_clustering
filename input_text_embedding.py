@@ -44,6 +44,7 @@ model.train(IndexedList(sentences))
 
 vectors_list = model.sv.vectors.tolist()  # 10 dimensions vectors
 tsne = TSNE(n_components=2)
+# tsne = TSNE(n_components=3)
 tsne_vectors = tsne.fit_transform(vectors_list)
 
 scores = []
@@ -60,11 +61,12 @@ scores_df = pd.DataFrame(scores, columns=['k', 'silhouette_score', 'inertia'])
 scores_df.to_csv("data/scores_input_text_only.csv", index=False)
 
 kmeans = KMeans(n_clusters=8, random_state=0).fit(tsne_vectors)
-gm = GaussianMixture(n_components=8, n_init=10, covariance_type="tied").fit(tsne_vectors)
+gm = GaussianMixture(n_components=8, n_init=10, covariance_type="diag").fit(tsne_vectors)
 hc = AgglomerativeClustering(n_clusters=8, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
 
 
 vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y"])
+# vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y", "z"])
 df = pd.merge(df, vectors_df, right_index=True, left_index=True)
 df['combine_text'] = sentences2
 df['kmeans_cluster'] = kmeans.labels_
@@ -75,4 +77,5 @@ df['short_bot_texts'] = short_bot_texts
 df['short_entities'] = short_entities
 
 df.to_csv("data/tsne_vectors_2d_input_text_only.csv", index=False)
+# df.to_csv("data/tsne_vectors_3d_input_text_only.csv", index=False)
 x = 0
