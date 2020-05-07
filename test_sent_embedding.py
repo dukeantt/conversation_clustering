@@ -49,22 +49,22 @@ vectors_list = model.sv.vectors.tolist()  # 10 dimensions vectors
 tsne = TSNE(n_components=2)
 tsne_vectors = tsne.fit_transform(vectors_list)
 
-scores = []
-for k in range(2,20):
-    x = k
-    kmeans = KMeans(n_clusters=x, random_state=0)
-    kmeans = kmeans.fit(tsne_vectors)
-    labels = kmeans.labels_
-    score = silhouette_score(tsne_vectors, labels)
-    inertia = kmeans.inertia_
-    scores.append((k, score,inertia))
-
-scores_df = pd.DataFrame(scores, columns=['k', 'silhouette_score', 'inertia'])
-scores_df.to_csv("data/scores.csv", index=False)
+# scores = []
+# for k in range(2,20):
+#     x = k
+#     kmeans = KMeans(n_clusters=x, random_state=0)
+#     kmeans = kmeans.fit(tsne_vectors)
+#     labels = kmeans.labels_
+#     score = silhouette_score(tsne_vectors, labels)
+#     inertia = kmeans.inertia_
+#     scores.append((k, score,inertia))
+#
+# scores_df = pd.DataFrame(scores, columns=['k', 'silhouette_score', 'inertia'])
+# scores_df.to_csv("data/scores.csv", index=False)
 
 kmeans = KMeans(n_clusters=12, random_state=0).fit(tsne_vectors)
 gm = GaussianMixture(n_components=6, n_init=10, covariance_type="diag").fit(tsne_vectors)
-hc = AgglomerativeClustering(n_clusters=5, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
+hc = AgglomerativeClustering(n_clusters=6, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
 
 
 # vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y","z"])
