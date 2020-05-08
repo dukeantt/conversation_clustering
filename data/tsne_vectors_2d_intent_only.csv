@@ -73,7 +73,7 @@ Bạn tham khảo sản phẩm sau nhé ạ:
 Bạn tham-<br>",url
 9.0,10,Có những màu gì ạ ?,query_knowledge_base,['attribute:color'],action_query_babe_kb,,"Dạ, BẢNG VẼ HOLLA 2 in 1 hiện có các màu: Hồng, Xanh
 <Show card tương ứng với các màu của sản phẩm>",,,-4.7048573,14.535648,query knowledge base,1,1,0,Có những màu gì ạ ?,"Dạ, BẢNG VẼ HOLLA 2 in 1 hiện có các màu: Hồng, Xa-<br>",['attribute:color']
-9.0,10,"Để mình tham khảo thêm , có gì mình báo sớm",finish_conv,,action_finish_conv,,"Dạ,vâng ạ",,,0.07558583,-12.538264,finish conv,4,2,3,"Để mình tham khảo thêm , có gì mình báo sớm","Dạ,vâng ạ",nan
+9.0,10,"Để mình tham khảo thêm , có gì mình báo sớm",finish_conv,,action_finish_conv,,"Dạ,vâng ạ",,,0.07558583,-12.538264,finish conv,4,5,3,"Để mình tham khảo thêm , có gì mình báo sớm","Dạ,vâng ạ",nan
 10.0,11,https://scontent.xx.fbcdn.net/v/t1.15752-9/92948814_645194249654417_7858679713655422976_n.jpg?_nc_cat=105&_nc_sid=b96e70&_nc_ohc=wRI0MxBYCusAX8FbQ55&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=fd554b026b9a9ba54d252a6b9a2a549b&oe=5EB53E67,send_link,"[""url:['https://scontent.xx.fbcdn.net/v/t1.15752-9/92948814_645194249654417_7858679713655422976_n.jpg?_nc_cat=105&_nc_sid=b96e70&_nc_ohc=wRI0MxBYCusAX8FbQ55&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=fd554b026b9a9ba54d252a6b9a2a549b&oe=5EB53E67']""]",action_handle_send_link_only,,Bạn đang tìm kiếm thông tin gì ạ?,"[{'object_type': 'bang_ve', 'product_id': '2293', 'product_name': 'BẢNG VẼ HOLLA 2 in 1', }]",,-9.312995,-9.182589,send link,0,3,1, bang_ve,Bạn đang tìm kiếm thông tin gì ạ?,url
 10.0,11,Giá bnh shop,query_knowledge_base,['attribute:price'],action_query_babe_kb,,"Sản phẩm BẢNG VẼ HOLLA 2 in 1 hiện shop đang có giá: *830,000 VND (giá gốc 1,090,000 VND)*.
 Bạn tham khảo các sản phẩm sau nhé ạ:",,,1.090896,19.188757,query knowledge base,1,1,0,Giá bnh shop,"Sản phẩm BẢNG VẼ HOLLA 2 in 1 hiện shop đang có gi-<br> á: *830,000 VND (giá gốc 1,090,000 VND)*.
@@ -1228,7 +1228,7 @@ Bộ này giá bnhieu vậy s",query_knowledge_base,"[""url:['https://scontent.x
 tư vấn mình với",query_knowledge_base,[],action_query_babe_kb,,"""Hiện tại sản phẩm Máy tiệt trùng  shop đang có những giá sau ạ:
 <500-1M> <1M-2M> <Tất cả giá>""",,,1.5982913,17.73794,query knowledge base,1,1,0,"mình muốn mua máy tiệt trùng uv
 tư vấn mình với","""Hiện tại sản phẩm Máy tiệt trùng  shop đang có nh-<br>",[]
-38.1,173,Ok m đặt trên shopee nha,just_inform,,,,Dạ vâng ạ!,,,0.07990785,-12.395873,just inform,4,2,3,Ok m đặt trên shopee nha,Dạ vâng ạ!,nan
+38.1,173,Ok m đặt trên shopee nha,just_inform,,,,Dạ vâng ạ!,,,0.07990785,-12.395873,just inform,4,5,3,Ok m đặt trên shopee nha,Dạ vâng ạ!,nan
 39.1,174,Shop ship cho minh ve dịa chi nay cái nhé 04 dường hạc thành. Phường tân sơn. Thành phố thanh hóa 0968955567,handover_to_inbox,[],action_handover_to_inbox,,,,,1.179072,-9.538573,handover to inbox,4,2,3,Shop ship cho minh ve dịa chi nay cái nhé 04 dường-<br>  hạc thành. Phường tân sơn. Thành phố thanh hóa 09-<br>,nan,[]
 40.1,175,Vâng ạ. Phí ship SG khoảng bao nhiêu ạ,ask_ship,['attribute:price'],utter_ask_ship,,"Shop Gấu và Bí ngô sẵn sàng phục vụ, gửi hàng trên toàn quốc. Chi tiết chính sách giao hàng bạn xem tại địa chỉ:
 <link chính sách bán hàng>",,,1.2523192,-6.954437,ask ship,5,2,2,Vâng ạ. Phí ship SG khoảng bao nhiêu ạ,"Shop Gấu và Bí ngô sẵn sàng phục vụ, gửi hàng trên-<br>  toàn quốc. Chi tiết chính sách giao hàng bạn xem -<br>",['attribute:price']
