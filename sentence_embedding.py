@@ -23,11 +23,16 @@ for index, value in df.iterrows():
     text = str(value['input_text'])
     if "scontent.xx.fbcdn.net" in str(value['input_text']):
         text = re.sub('\[|\]|\'|\n|\{|\}', '', str(value['cv_outputs']))
-        # text = text.split(',')[0].replace('object_type:', '')
         if text.split(',')[0].replace('object_type:', '') == ' ':
             text = text.split(',')[2].replace('product_name:', '')
         else:
             text = text.split(',')[0].replace('object_type:', '')
+
+    text += ' ' + str(value['intent']) + ' ' + str(value['entities'])
+    text = re.sub('\[|\]|\'|\n|\{|\}', ' ', text)
+    text = text.replace("₫1", " ")
+    text = text.replace("•", " ")
+
 
     text = text.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
     text = text.lower()
@@ -61,11 +66,12 @@ for index, value in df.iterrows():
     short_bot_texts.append(short_bot_text)
     short_entities.append(short_entity)
 
+
 tfidf_vectorizer = TfidfVectorizer(analyzer="word", token_pattern=r"(?u)\w+")
 tfidf = tfidf_vectorizer.fit_transform(sentences2)
 tfidf_df = pd.DataFrame(tfidf.toarray(), columns=tfidf_vectorizer.get_feature_names())
 
-model = Word2Vec(sentences, size=20, window=3, min_count=1, workers=4)
+model = Word2Vec(sentences, size=20, window=5, min_count=1, workers=4)
 vectors_list = []
 for sent_index, sent_value in enumerate(sentences):
     if (len(sent_value) == 0):
@@ -93,22 +99,26 @@ for sent_index, sent_value in enumerate(sentences):
 tsne = TSNE(n_components=2)
 tsne_vectors = tsne.fit_transform(vectors_list)
 
-# scores = []
-# for k in range(2,20):
-#     x = k
-#     kmeans = KMeans(n_clusters=x, random_state=0)
-#     kmeans = kmeans.fit(tsne_vectors)
-#     labels = kmeans.labels_
-#     score = silhouette_score(tsne_vectors, labels)
-#     inertia = kmeans.inertia_
-#     scores.append((k, score,inertia))
-#
-# scores_df = pd.DataFrame(scores, columns=['k', 'silhouette_score','inertia'])
-# scores_df.to_csv("data/custom_embedding_scores.csv", index=False)
+scores = []
+for k in range(2,20):
+    x = k
+    kmeans = KMeans(n_clusters=x, random_state=0)
+    kmeans = kmeans.fit(tsne_vectors)
+    labels = kmeans.labels_
+    score = silhouette_score(tsne_vectors, labels)
+    inertia = kmeans.inertia_
+    scores.append((k, score,inertia))
 
-gm = GaussianMixture(n_components=12, n_init=10, covariance_type="spherical").fit(tsne_vectors)
-hc = AgglomerativeClustering(n_clusters=12, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
-kmeans = KMeans(n_clusters=12, random_state=0).fit(tsne_vectors)
+scores_df = pd.DataFrame(scores, columns=['k', 'silhouette_score','inertia'])
+scores_df.to_csv("data/custom_embedding_scores.csv", index=False)
+
+gm = GaussianMixture(n_components=6, n_init=10, covariance_type="spherical").fit(tsne_vectors)
+hc = AgglomerativeClustering(n_clusters=6, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
+kmeans = KMeans(n_clusters=6, random_state=0).fit(tsne_vectors)
+
+# gm = GaussianMixture(n_components=8, n_init=10, covariance_type="spherical").fit(tsne_vectors)
+# hc = AgglomerativeClustering(n_clusters=8, affinity='euclidean', linkage='ward').fit_predict(tsne_vectors)
+# kmeans = KMeans(n_clusters=8, random_state=0).fit(tsne_vectors)
 
 vectors_df = pd.DataFrame(data=tsne_vectors, columns=["x", "y"])
 df = pd.merge(df, vectors_df, right_index=True, left_index=True)
@@ -120,6 +130,8 @@ df['short_input_texts'] = short_input_texts
 df['short_bot_texts'] = short_bot_texts
 df['short_entities'] = short_entities
 
-df.to_csv("data/custom_embedding_12_clusters.csv", index=False)
+# df.to_csv("data/custom_embedding_6_clusters_input.csv", index=False)
+# df.to_csv("data/custom_embedding_8_clusters_intent_n_input.csv", index=False)
+# df.to_csv("data/custom_embedding_12_clusters_input.csv", index=False)
 
 x = 0
